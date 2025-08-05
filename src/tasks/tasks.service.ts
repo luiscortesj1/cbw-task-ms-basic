@@ -8,9 +8,7 @@ import { TaskStatus } from './enums/task-status.enum';
 
 @Injectable()
 export class TasksService {
-  constructor(
-    @InjectModel(Task.name) private taskModel: Model<TaskDocument>,
-  ) { }
+  constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
 
   async create(createTaskDto: CreateTaskDto) {
     const createdTask = new this.taskModel(createTaskDto);
@@ -21,7 +19,6 @@ export class TasksService {
     return this.taskModel.find().exec();
   }
 
-
   async findOne(id: string): Promise<Task> {
     const task = await this.taskModel.findById(id).exec();
     if (!task) {
@@ -29,7 +26,6 @@ export class TasksService {
     }
     return task;
   }
-
 
   async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
     const updatedTask = await this.taskModel
@@ -49,8 +45,6 @@ export class TasksService {
     }
     return tasks;
   }
-
-
 
   async remove(id: string): Promise<Task> {
     const deletedTask = await this.taskModel.findByIdAndDelete(id).exec();

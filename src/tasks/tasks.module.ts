@@ -16,4 +16,4 @@ import { NotifyProcessor } from 'src/jobs/processors/notify.processor';
     }),
   ],
 })
-export class TasksModule { }
+export class TasksModule {}

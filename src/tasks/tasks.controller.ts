@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Get, Param, Put, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Put,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './entities/task.entity';
@@ -14,8 +23,7 @@ export class TasksController {
   constructor(
     private readonly tasksService: TasksService,
     @InjectQueue('tasks-queue') private readonly tasksQueue: Queue,
-  ) { }
-
+  ) {}
 
   @Post()
   create(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
@@ -33,7 +41,10 @@ export class TasksController {
   }
 
   @Put(':id')
-  update(@Param('id', ParseMongoIdPipe) id: string, @Body() body: UpdateTaskDto) {
+  update(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @Body() body: UpdateTaskDto,
+  ) {
     return this.tasksService.update(id, body);
   }
 
@@ -63,6 +74,4 @@ export class TasksController {
     const delay = new Date(body.runAt).getTime() - Date.now();
     return this.tasksQueue.add('notify', { taskId: id }, { delay });
   }
-
-
 }

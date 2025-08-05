@@ -14,8 +14,9 @@ import { JobsModule } from './jobs/jobs.module';
         port: envs.redisPort,
       },
     }),
-    TasksModule],
+    TasksModule,
+  ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

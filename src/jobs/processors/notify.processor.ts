@@ -8,7 +8,7 @@ import { Task, TaskDocument } from 'src/tasks/entities/task.entity';
 export class NotifyProcessor {
   constructor(
     @InjectModel(Task.name) private readonly taskModel: Model<TaskDocument>,
-  ) { }
+  ) {}
 
   @Process('notify')
   async handleNotify(job: Job) {

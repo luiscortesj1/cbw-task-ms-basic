@@ -8,10 +8,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
-    })
+    }),
   );
   await app.listen(envs.port ?? 3000);
   console.log(`Application is running on port ${envs.port}`);
-  
 }
 bootstrap();
