@@ -4,6 +4,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { Model } from 'mongoose';
 import { Task, TaskDocument } from './entities/task.entity';
 import { InjectModel } from '@nestjs/mongoose';
+import { TaskStatus } from './enums/task-status.enum';
 
 @Injectable()
 export class TasksService {
@@ -41,8 +42,21 @@ export class TasksService {
     return updatedTask;
   }
 
+  async findByStatus(status: TaskStatus): Promise<Task[]> {
+    const tasks = await this.taskModel.find({ status }).exec();
+    if (tasks.length === 0) {
+      throw new NotFoundException(`No tasks found with status ${status}`);
+    }
+    return tasks;
+  }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+
+
+  async remove(id: string): Promise<Task> {
+    const deletedTask = await this.taskModel.findByIdAndDelete(id).exec();
+    if (!deletedTask) {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
+    return deletedTask;
   }
 }
