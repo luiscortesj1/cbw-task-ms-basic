@@ -3,7 +3,6 @@ import { TasksModule } from './tasks/tasks.module';
 import { envs } from './config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BullModule } from '@nestjs/bull';
-import { JobsModule } from './jobs/jobs.module';
 
 @Module({
   imports: [
@@ -19,4 +18,4 @@ import { JobsModule } from './jobs/jobs.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
