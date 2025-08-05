@@ -1,22 +1,26 @@
-import { IsString, IsOptional, IsEnum, IsDateString } from 'class-validator';
+import { IsOptional, IsEnum, IsNotEmpty, IsString, IsDateString } from 'class-validator';
+import { TaskStatus } from '../enums/task-status.enum';
 
 export class CreateTaskDto {
   @IsString()
-  readonly title: string;
+  @IsNotEmpty()
+  title: string;
 
   @IsOptional()
   @IsString()
-  readonly description?: string;
+  description?: string;
 
   @IsOptional()
-  @IsEnum(['pending', 'in_progress', 'completed'])
-  readonly status?: 'pending' | 'in_progress' | 'completed';
+  @IsEnum(TaskStatus, {
+    message: `status must be one of the following values: ${Object.values(TaskStatus).join(', ')}`,
+  })
+  status?: TaskStatus;
 
   @IsOptional()
   @IsString()
-  readonly assigned_to?: string;
+  assigned_to?: string;
 
   @IsOptional()
   @IsDateString()
-  readonly due_date?: Date;
+  due_date?: Date;
 }

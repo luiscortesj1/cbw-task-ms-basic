@@ -1,35 +1,14 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller, Post, Body } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { Task } from './entities/task.entity';
 
-@Controller()
+@Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @MessagePattern('createTask')
-  create(@Payload() createTaskDto: CreateTaskDto) {
+  @Post()
+  create(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     return this.tasksService.create(createTaskDto);
-  }
-
-  @MessagePattern('findAllTasks')
-  findAll() {
-    return this.tasksService.findAll();
-  }
-
-  @MessagePattern('findOneTask')
-  findOne(@Payload() id: number) {
-    return this.tasksService.findOne(id);
-  }
-
-  @MessagePattern('updateTask')
-  update(@Payload() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(updateTaskDto.id, updateTaskDto);
-  }
-
-  @MessagePattern('removeTask')
-  remove(@Payload() id: number) {
-    return this.tasksService.remove(id);
   }
 }

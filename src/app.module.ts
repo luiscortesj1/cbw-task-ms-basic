@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
+import { envs } from './config';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [TasksModule],
+  imports: [
+    MongooseModule.forRoot(envs.databaseUrl),
+    TasksModule],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
