@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  cbw-task-ms:
+    build: .
+    container_name: cbw-task-ms
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - PORT=${PORT}
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    restart: always
+
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+volumes:
+  mongo-data:
