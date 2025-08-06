@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { Task, TaskDocument } from './entities/task.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { TaskStatus } from './enums/task-status.enum';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class TasksService {
@@ -15,8 +16,24 @@ export class TasksService {
     return createdTask.save();
   }
 
-  async findAll(): Promise<Task[]> {
-    return this.taskModel.find().exec();
+  async findAll(paginationDto: PaginationDto) {
+    const { page = 1, limit = 10 } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const total = await this.taskModel.countDocuments();
+    const lastPage = Math.ceil(total / limit);
+
+    const data = await this.taskModel.find().skip(skip).limit(limit).exec();
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        lastPage,
+        limit,
+      },
+    };
   }
 
   async findOne(id: string): Promise<Task> {

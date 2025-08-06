@@ -7,6 +7,7 @@ import {
   Put,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -17,6 +18,9 @@ import { PatchTaskDto } from './dto/patch-task.dto';
 import { TaskStatus } from './enums/task-status.enum';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bullmq';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { Payload } from '@nestjs/microservices';
+import { PaginationResponse } from './interfaces/pagination-response.interface';
 
 @Controller('tasks')
 export class TasksController {
@@ -31,12 +35,14 @@ export class TasksController {
   }
 
   @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  findAll(
+    @Query() paginationDto: PaginationDto,
+  ): Promise<PaginationResponse<Task>> {
+    return this.tasksService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Task> {
     return this.tasksService.findOne(id);
   }
 
@@ -44,7 +50,7 @@ export class TasksController {
   update(
     @Param('id', ParseMongoIdPipe) id: string,
     @Body() body: UpdateTaskDto,
-  ) {
+  ): Promise<Task> {
     return this.tasksService.update(id, body);
   }
 
@@ -52,12 +58,12 @@ export class TasksController {
   patch(
     @Param('id', ParseMongoIdPipe) id: string,
     @Body() patchTaskDto: PatchTaskDto,
-  ) {
+  ): Promise<Task> {
     return this.tasksService.update(id, patchTaskDto);
   }
 
   @Get('status/:status')
-  findByStatus(@Param('status') status: TaskStatus) {
+  findByStatus(@Param('status') status: TaskStatus): Promise<Task[]> {
     return this.tasksService.findByStatus(status);
   }
 
