@@ -18,4 +18,4 @@ import { BullModule } from '@nestjs/bull';
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
