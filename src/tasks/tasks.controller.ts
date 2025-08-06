@@ -42,7 +42,7 @@ export class TasksController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Task> {
+  findOne(@Param('id', ParseMongoIdPipe) id: string): Promise<Task> {
     return this.tasksService.findOne(id);
   }
 
